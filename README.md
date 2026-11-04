@@ -8,6 +8,9 @@ Everything runs in your browser. Your project and audio never leave your compute
 
 ## What you see
 
+<img width="1093" height="790" alt="Screenshot 2026-11-04 at 22 34 24" src="https://github.com/user-attachments/assets/e0045930-2b3f-4e99-ad35-58b1000427f4" />
+
+
 | Axis | Meaning |
 | --- | --- |
 | Height | Frequency, from sub at the floor to air at the top (log scale, 20 Hz–20 kHz) |
