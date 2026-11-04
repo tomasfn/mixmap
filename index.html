@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mixmap</title>
+  <meta name="description" content="See your Ableton Live set as a 3D mix map: frequency, stereo width, level and clashes, bar by bar. Runs in your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <main class="landing" id="landing">
+    <div class="landing-inner">
+      <section class="hero">
+        <div class="eyebrow">Mixmap</div>
+        <h1>See your set as a space.</h1>
+        <p class="lede">Drop an Ableton Live project and every track becomes a shape of light in a 3D room. You can see where each sound lives, what collides, and which parts of the spectrum are empty, bar by bar.</p>
+        <dl class="axes">
+          <dt>Height</dt><dd>Frequency, from sub at the floor to air at the top</dd>
+          <dt>Width</dt><dd>Stereo width and pan</dd>
+          <dt>Depth</dt><dd>Level. Louder sounds come forward</dd>
+          <dt>Color</dt><dd>The notes being played, on the circle of fifths</dd>
+        </dl>
+        <div class="steps">
+          <h3>For the most accurate map</h3>
+          <ol>
+            <li>Save your set, then run <code>File → Collect All and Save</code> so the samples sit in the project folder.</li>
+            <li>Export stems: <code>File → Export Audio/Video</code>, set <b>Rendered Track</b> to <b>All Individual Tracks</b>, start at bar 1, and save them into the project folder.</li>
+            <li>Drop the whole project folder here.</li>
+          </ol>
+          <p class="privacy">Without stems, audio tracks are measured from their samples and MIDI tracks are estimated from their notes.</p>
+        </div>
+      </section>
+      <section>
+        <div class="drop" id="drop">
+          <h2>Drop your project folder</h2>
+          <p>The folder with your <code>.als</code> file. Stems and samples inside it are picked up automatically. You can also drop a saved <code>.mixmap.json</code> file.</p>
+          <div class="row">
+            <label class="btn primary">Choose folder<input type="file" id="pick-folder" webkitdirectory multiple></label>
+            <label class="btn">Choose files<input type="file" id="pick-files" multiple accept=".als,.json,audio/*"></label>
+            <button class="btn" id="demo">Try the demo</button>
+          </div>
+          <details class="opts">
+            <summary>Options</summary>
+            <div class="grid">
+              <label for="stem-bar">Stems start at bar</label><input id="stem-bar" type="number" min="1" value="1">
+              <label for="bpm">Tempo if there's no .als</label><input id="bpm" type="number" min="20" max="300" value="120">
+            </div>
+          </details>
+          <div class="progress" id="progress" hidden><div class="bar"><b></b></div><div class="msg"></div></div>
+          <div class="err" id="err" hidden></div>
+          <p class="privacy"><b>Private by design.</b> Everything runs in your browser. Your audio never leaves your computer.</p>
+        </div>
+      </section>
+    </div>
+    <footer>Mixmap is an independent open-source project and is not affiliated with Ableton. <a href="https://github.com/tomasfn/mixmap">Source on GitHub</a>.</footer>
+  </main>
+  <div id="viewer" hidden></div>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
