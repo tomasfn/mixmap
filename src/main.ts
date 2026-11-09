@@ -12,6 +12,17 @@ let unmount: (() => void) | null = null;
 let current: MapData | null = null;
 
 const KEEP = /\.(als|json|wav|wave|aif|aiff|flac|mp3|m4a|ogg)$/i;
+const NO_WEBGL = 'Your browser has WebGL turned off, so the 3D map can\'t be drawn. In Chrome, turn on Settings → System → "Use graphics acceleration when available", then restart the browser.';
+
+function hasWebGL() {
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    return gl !== null;
+  } catch {
+    return false;
+  }
+}
 
 function showError(message: string) {
   progress.hidden = true;
@@ -27,13 +38,20 @@ function setProgress(message: string, fraction: number) {
 }
 
 function show(map: MapData, hash = '') {
+  if (!hasWebGL()) throw new Error(NO_WEBGL);
   current = map;
   history.replaceState(null, '', location.pathname + location.search + hash);
   unmount?.();
+  unmount = null;
   landing.hidden = true;
   viewerRoot.hidden = false;
   document.title = `${map.name} · Mixmap`;
-  unmount = mountViewer(viewerRoot, map, { onOpenAnother: reset, onDownload: download });
+  try {
+    unmount = mountViewer(viewerRoot, map, { onOpenAnother: reset, onDownload: download });
+  } catch (e) {
+    reset();
+    throw e instanceof Error && /webgl/i.test(e.message) ? new Error(NO_WEBGL) : e;
+  }
 }
 
 function reset() {
@@ -137,6 +155,7 @@ async function loadDemo() {
   }
 }
 $('demo').addEventListener('click', loadDemo);
+if (!hasWebGL()) showError(NO_WEBGL);
 if (location.hash === '#demo') void loadDemo();
 
 if (import.meta.env.DEV) {
